@@ -38,6 +38,10 @@ app.register(getWeekPendingGoalsRoute);
 
 const port = Number(process.env.PORT) || 3333; // Converte para número ou usa 3333 como fallback
 
+app.get("/", async () => {
+	return { message: "API is running" };
+});
+
 app.listen({ port }).then(() => {
 	console.log(`HTTP server running on port ${port}`);
 });
