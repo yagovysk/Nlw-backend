@@ -15,7 +15,7 @@ const app = fastify().withTypeProvider<ZodTypeProvider>();
 app.register(fastifyCors, {
 	origin:
 		process.env.NODE_ENV === "production"
-			? ["https://inorbityago.netlify.app/"]
+			? ["https://inorbityago.netlify.app"]
 			: "*",
 });
 
