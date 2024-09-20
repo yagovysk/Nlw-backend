@@ -13,10 +13,14 @@ import { getWeekPendingGoalsRoute } from "./routes/get-week-pending-goals";
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
 app.register(fastifyCors, {
-	origin:
-		process.env.NODE_ENV === "production"
-			? ["https://inorbityago.netlify.app"]
-			: "*",
+	origin: (origin, cb) => {
+		if (!origin || origin === "https://inorbityago.netlify.app") {
+			cb(null, true); // Permite a requisição
+		} else {
+			cb(new Error("Not allowed"), false); // Bloqueia a requisição de outras origens
+		}
+	},
+	methods: ["GET", "POST", "PUT", "DELETE"], // Certifique-se de que esses métodos sejam permitidos, se necessário.
 });
 
 app.setValidatorCompiler(validatorCompiler);
