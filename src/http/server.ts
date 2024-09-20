@@ -16,13 +16,13 @@ app.register(fastifyCors, {
 	origin: (origin, cb) => {
 		const allowedOrigins = [
 			"https://inorbityago.netlify.app",
-			"http://localhost:3000", // Permitir localhost durante o desenvolvimento
+			"http://localhost:3000",
 		];
 
 		if (!origin || allowedOrigins.includes(origin)) {
-			cb(null, true); // Permite a requisição
+			cb(null, true);
 		} else {
-			cb(new Error("Not allowed"), false); // Bloqueia outras origens
+			cb(new Error("Not allowed"), false);
 		}
 	},
 	methods: ["GET", "POST", "PUT", "DELETE"],
@@ -36,11 +36,7 @@ app.register(createGoalCompletionRoute);
 app.register(getWeekSummaryRoute);
 app.register(getWeekPendingGoalsRoute);
 
-const port = Number(process.env.PORT) || 3333; // Converte para número ou usa 3333 como fallback
-
-app.get("/", async () => {
-	return { message: "API is running" };
-});
+const port = Number(process.env.PORT) || 3333;
 
 app.listen({ port }).then(() => {
 	console.log(`HTTP server running on port ${port}`);
