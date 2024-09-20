@@ -14,13 +14,18 @@ const app = fastify().withTypeProvider<ZodTypeProvider>();
 
 app.register(fastifyCors, {
 	origin: (origin, cb) => {
-		if (!origin || origin === "https://inorbityago.netlify.app") {
+		const allowedOrigins = [
+			"https://inorbityago.netlify.app",
+			"http://localhost:3000", // Permitir localhost durante o desenvolvimento
+		];
+
+		if (!origin || allowedOrigins.includes(origin)) {
 			cb(null, true); // Permite a requisição
 		} else {
-			cb(new Error("Not allowed"), false); // Bloqueia a requisição de outras origens
+			cb(new Error("Not allowed"), false); // Bloqueia outras origens
 		}
 	},
-	methods: ["GET", "POST", "PUT", "DELETE"], // Certifique-se de que esses métodos sejam permitidos, se necessário.
+	methods: ["GET", "POST", "PUT", "DELETE"],
 });
 
 app.setValidatorCompiler(validatorCompiler);
