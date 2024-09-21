@@ -9,24 +9,13 @@ import { createGoalRoute } from "./routes/create-goal";
 import { createGoalCompletionRoute } from "./routes/create-goal-completion";
 import { getWeekSummaryRoute } from "./routes/get-week-summary";
 import { getWeekPendingGoalsRoute } from "./routes/get-week-pending-goals";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
-app.register(fastifyCors, {
-	origin: (origin, cb) => {
-		const allowedOrigins = [
-			"https://inorbityago.netlify.app",
-			"http://localhost:3000",
-		];
-
-		if (!origin || allowedOrigins.includes(origin)) {
-			cb(null, true);
-		} else {
-			cb(new Error("Not allowed"), false);
-		}
-	},
-	methods: ["GET", "POST", "PUT", "DELETE"],
-});
+app.register(fastifyCors, { origin: "*" });
 
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
@@ -36,8 +25,8 @@ app.register(createGoalCompletionRoute);
 app.register(getWeekSummaryRoute);
 app.register(getWeekPendingGoalsRoute);
 
-const port = Number(process.env.PORT) || 3333;
+const serverUrl = process.env.SERVER_URL || "http://localhost:3333";
 
-app.listen({ port }).then(() => {
-	console.log(`HTTP server running on port ${port}`);
+app.listen({ port: 3333 }).then(() => {
+	console.log(`HTTP server running on ${serverUrl}`);
 });
